@@ -91,16 +91,16 @@ const accountDataReducer = (state = {}, action) => {
 
 ### Selecting:
 
-This library also provides helpers getting information about ongoing actions: `makeIsPendingSelector` and `makeErrorSelector`. These two functions let you make selectors for pending and error states from your actions:
+This library also provides helpers getting information about ongoing actions: `isPendingSelector` and `errorSelector`. These two functions let you make selectors for pending and error states from your actions:
 
 ```js
-const selectAccountsFetchPending = makeIsPendingSelector(FETCH_ACCOUNTS);
+const selectAccountsFetchPending = isPendingSelector(FETCH_ACCOUNTS);
 
 selectAccountsPending(state);
 ```
 
 ```js
-const selectAccountsFetchFailed = makeErrorSelector(FETCH_ACCOUNTS);
+const selectAccountsFetchFailed = errorSelector(FETCH_ACCOUNTS);
 
 // If an error happened, this will give you an object containing the error's
 // name, message, and stack trace.
@@ -160,21 +160,21 @@ const accountDataReducer = (state = {}, action) => {
 Finally, the identifier can also be used in your selectors to get info about specific requests:
 
 ```js
-import { makeIsPendingSelector } from '@wealthsimple/async-action';
+import { isPendingSelector } from '@wealthsimple/async-action';
 
-const selector = makeIsPendingSelector('FETCH_ACCOUNT_DATA', 'id1');
+const selector = isPendingSelector('FETCH_ACCOUNT_DATA', 'id1');
 
 // Returns true if the FETCH_ACCOUNT_DATA request with identifier === 'id1'
 // is pending.
 selector(state);
 ```
 
-Or if you only care whether any instance of this request is pending you can use `makeAllPendingSelector`:
+Or if you only care whether any instance of this request is pending you can use `allPendingSelector`:
 
 ```js
-import { makeAllPendingSelector } from '@wealthsimple/async-action';
+import { allPendingSelector } from '@wealthsimple/async-action';
 
-const selector = makeAllPendingSelector('FETCH_ACCOUNT_DATA');
+const selector = allPendingSelector('FETCH_ACCOUNT_DATA');
 
 // Returns an array of identifiers for this action type that are
 // currently pending.

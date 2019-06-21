@@ -1,8 +1,8 @@
 // @flow
 import {
-  makeIsPendingSelector,
-  makeErrorSelector,
-  makeAllPendingSelector,
+  isPendingSelector,
+  errorSelector,
+  allPendingSelector,
 } from './async.selectors';
 
 describe('AsyncSelectors', () => {
@@ -30,33 +30,53 @@ describe('AsyncSelectors', () => {
   });
 
   it('should let you select an ongoing action', () => {
-    const fooId1PendingSelector = makeIsPendingSelector('FOO_ACTION', 'fooId1');
-    const fooId2PendingSelector = makeIsPendingSelector('FOO_ACTION', 'fooId2');
-    const fooId3PendingSelector = makeIsPendingSelector('FOO_ACTION', 'fooId3');
+    const fooId1Pending = isPendingSelector(state, {
+      type: 'FOO_ACTION',
+      identifier: 'fooId1',
+    });
+    const fooId2Pending = isPendingSelector(state, {
+      type: 'FOO_ACTION',
+      identifier: 'fooId2',
+    });
+    const fooId3Pending = isPendingSelector(state, {
+      type: 'FOO_ACTION',
+      identifier: 'fooId3',
+    });
 
-    expect(fooId1PendingSelector(state)).toBe(true);
-    expect(fooId2PendingSelector(state)).toBe(false);
-    expect(fooId3PendingSelector(state)).toBe(false);
+    expect(fooId1Pending).toBe(true);
+    expect(fooId2Pending).toBe(false);
+    expect(fooId3Pending).toBe(false);
   });
 
   it('should let you select an error', () => {
-    const fooId1ErrorSelector = makeErrorSelector('FOO_ACTION', 'fooId1');
-    const fooId2ErrorSelector = makeErrorSelector('FOO_ACTION', 'fooId2');
-    const fooId3ErrorSelector = makeErrorSelector('FOO_ACTION', 'fooId3');
+    const fooId1Error = errorSelector(state, {
+      type: 'FOO_ACTION',
+      identifier: 'fooId1',
+    });
+    const fooId2Error = errorSelector(state, {
+      type: 'FOO_ACTION',
+      identifier: 'fooId2',
+    });
+    const fooId3Error = errorSelector(state, {
+      type: 'FOO_ACTION',
+      identifier: 'fooId3',
+    });
 
-    expect(fooId1ErrorSelector(state)).toBe(null);
-    expect(fooId2ErrorSelector(state)).toEqual({
+    expect(fooId1Error).toBe(null);
+    expect(fooId2Error).toEqual({
       name: 'Error',
       message: 'BOOM',
       stack: fakeError.stack,
     });
 
-    expect(fooId3ErrorSelector(state)).toBe(null);
+    expect(fooId3Error).toBe(null);
   });
 
   it('should let you select all ongoing identifiers for an action', () => {
-    const fooActionAllPendingSelector = makeAllPendingSelector('FOO_ACTION');
+    const fooActionAllPending = allPendingSelector(state, {
+      type: 'FOO_ACTION',
+    });
 
-    expect(fooActionAllPendingSelector(state)).toEqual(['fooId0', 'fooId1']);
+    expect(fooActionAllPending).toEqual(['fooId0', 'fooId1']);
   });
 });

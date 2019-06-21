@@ -7,10 +7,7 @@ import type {
   SimpleAction,
   GetState,
 } from './async.types';
-import {
-  makeIsPendingSelector,
-  makeCachedResponseSelector,
-} from './async.selectors';
+import { isPendingSelector, cachedResponseSelector } from './async.selectors';
 
 export const isPending = (action: $Subtype<SimpleAction>) =>
   !!action.meta && action.meta.status === 'ASYNC_PENDING';
@@ -45,8 +42,7 @@ export const createAsyncAction = <Action: SimpleAction, Payload>(
   dispatch: Dispatch<AsyncAction<Action, Payload>>,
   getState: GetState<*>,
 ): Promise<Payload> => {
-  const isPendingSelector = makeIsPendingSelector(action.type, identifier);
-  if (isPendingSelector(getState())) {
+  if (isPendingSelector(getState(), { type: action.type, identifier })) {
     dispatch({
       ...action,
       payload: null,
@@ -57,14 +53,14 @@ export const createAsyncAction = <Action: SimpleAction, Payload>(
   }
 
   if (cache && !overwriteCache) {
-    const cachedResponseSelector = makeCachedResponseSelector(
-      action.type,
+    // $FlowFixMe
+    const cachedResponse: Payload = cachedResponseSelector(getState(), {
+      type: action.type,
       identifier,
       ttlSeconds,
-    );
+    });
 
-    const cachedResponse = cachedResponseSelector(getState());
-    if (cachedResponse) {
+    if (cachedResponse !== null && undefined !== cachedResponse) {
       dispatch({
         ...action,
         payload: cachedResponse,

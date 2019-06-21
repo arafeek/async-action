@@ -47,9 +47,16 @@ export type AsyncActionRecord = {
 };
 
 export type AsyncActionState = {
-  [actionType: string]: AsyncActionRecord,
+  [type: string]: AsyncActionRecord,
 };
 
-export type AllPendingSelector = (state: *) => string[];
-export type IsPendingSelector = (state: *) => boolean;
-export type ErrorSelector = (state: *) => ?ErrorInfo;
+export type SelectorProps = {
+  type: string,
+  identifier?: string,
+  ttlSeconds?: number,
+};
+
+export type AllPendingSelector = (state: *, props: SelectorProps) => string[];
+export type IsPendingSelector = (state: *, props: SelectorProps) => boolean;
+export type ErrorSelector = (state: *, props: SelectorProps) => ?ErrorInfo;
+export type CachedResponseSelector = (state: *, props: SelectorProps) => mixed;
