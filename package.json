@@ -2,7 +2,7 @@
   "name": "@wealthsimple/async-action",
   "version": "5.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "check_types": "yarn flow",
     "flow": "flow check",
